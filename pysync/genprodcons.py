@@ -2,7 +2,7 @@ from threading import Condition
 from collections import deque
 
 class GenProdCons:
-    def __init__(self, size=10):  # Cambiado de 100 a 10
+    def __init__(self, size=10): 
         self.buffer = deque(maxlen=size)
         self.size = size
         self.condition = Condition()
