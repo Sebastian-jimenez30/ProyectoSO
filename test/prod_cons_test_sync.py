@@ -23,7 +23,6 @@ def basic_consumer(prod_cons, times, output):
         value = prod_cons.get()
         output.append(value)
 
-# 🧪 Clase de test
 class TestProdConsTestSync(unittest.TestCase):
     def test_prod_cons_all(self):
         prod_cons = prod_cons_imprt.GenProdCons()
