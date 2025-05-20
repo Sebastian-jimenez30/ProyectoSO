@@ -1,5 +1,3 @@
-# Test Basic
-
 import os
 import unittest
 from threading import Thread
@@ -15,30 +13,29 @@ else:
 
 prod_cons_imprt = importlib.__import__(prod_cons_mdl, globals(), locals(), [], 0)
 
+def basic_producer(prod_cons, times, output):
+    for i in range(times):
+        prod_cons.put(i)
+        output.append(i)
+
+def basic_consumer(prod_cons, times, output):
+    for _ in range(times):
+        value = prod_cons.get()
+        output.append(value)
+
+# 🧪 Clase de test
 class TestProdConsTestSync(unittest.TestCase):
-
-    def __basic_producer(prod_cons,times=100):
-        prod_values = []
-        for i in range(0,times):
-            prod_cons.put(i)
-            prod_values.append(i)
-
-        return prod_values
-        
-
-    def __basic_consumer(prod_cons,times=100):
-        cons_values = []
-        for i in range(0,times):
-            cons_values.append(prod_cons.get())
-
-        return cons_values
-    
     def test_prod_cons_all(self):
         prod_cons = prod_cons_imprt.GenProdCons()
-        prod_thr = Thread(target=__basic_producer,args=(prod_cons,100))
-        cons_thr = Thread(target=__basic_consumer,args=(prod_cons,100))
+        produced = []
+        consumed = []
+
+        prod_thr = Thread(target=basic_producer, args=(prod_cons, 100, produced))
+        cons_thr = Thread(target=basic_consumer, args=(prod_cons, 100, consumed))
+
         prod_thr.start()
         cons_thr.start()
-        prod_values = prod_thr.join()
-        cons_values = cons_thr.join()
-        self.assertEquals(prod_values,cons_values)
+        prod_thr.join()
+        cons_thr.join()
+
+        self.assertEqual(produced, consumed) 
